@@ -18,5 +18,4 @@ class LeaderboardController implements ControllerInterface
 
         return $view;
     }
-
 }

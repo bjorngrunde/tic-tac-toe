@@ -24,3 +24,7 @@ body {
     text-align: center;
     line-height: 0;
 }
+
+.red-text {
+    color: red;
+}

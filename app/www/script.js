@@ -1,4 +1,3 @@
-// Enum like status object
 const STATUS = Object.freeze({
   WON: {
     status: "won",
@@ -136,6 +135,20 @@ function showGameOverModal(gameStatus) {
 
   if (gameStatus.status === "won") {
     modal.querySelector(".modal-body").appendChild(gameStatus.form())
+
+    document
+      .querySelector("input[name=userName]")
+      .addEventListener("input", (event) => {
+        const validation = validateInput(event.target.value)
+
+        if (validation) {
+          document.getElementById("submitBtn").removeAttribute("disabled")
+        } else {
+          document
+            .getElementById("submitBtn")
+            .setAttribute("disabled", "disbaled")
+        }
+      })
   }
 
   modal.querySelector("#closeModal").addEventListener("click", function () {
@@ -162,6 +175,10 @@ function createUserForm() {
   inputField.setAttribute("placeholder", "Add your username")
   inputField.setAttribute("name", "userName")
 
+  const errorMessage = document.createElement("p")
+  errorMessage.setAttribute("id", "userErrorMessage")
+  errorMessage.classList.add("red-text")
+
   const csrfField = document.createElement("input")
   csrfField.setAttribute("name", "csrfToken")
   csrfField.setAttribute("type", "hidden")
@@ -184,10 +201,37 @@ function createUserForm() {
   playTimeField.setAttribute("value", GameTime.end - GameTime.start)
 
   inputGroup.appendChild(inputField)
+  inputGroup.appendChild(errorMessage)
+
   form.appendChild(inputGroup)
   form.appendChild(csrfField)
   form.appendChild(gridSizeField)
   form.appendChild(playTimeField)
 
   return form
+}
+
+function validateInput(name) {
+  if (name === "") {
+    setErrorMessage("Field can't be empty")
+    return false
+  }
+
+  if (name.length <= 3 || name.length > 20) {
+    setErrorMessage("A name must be at least 3 characters and maximum of 20")
+    return false
+  }
+  // LOL did not know support for internationalization was this bad in JS :D
+  if (!name.match(/^[a-zA-ZäöåÄÖÅ0-9_]+$/)) {
+    setErrorMessage("only letters, numbers, and underscores allowed")
+    return false
+  }
+  setErrorMessage("")
+  return true
+}
+
+function setErrorMessage(message) {
+  const elem = document.getElementById("userErrorMessage")
+
+  elem.innerHTML = message
 }
