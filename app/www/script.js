@@ -11,8 +11,17 @@ const STATUS = Object.freeze({
   DRAW: { status: "draw", message: "Draw! Better luck next time." },
 })
 
+const GameTime = {
+  start: 0,
+  end: 0,
+}
+
 function makeMove(buttonId) {
   setButtonsValue(buttonId, "X")
+
+  if (GameTime.start === 0) {
+    GameTime.start = Date.now()
+  }
   makeOpponentsTurn()
 }
 
@@ -70,6 +79,8 @@ function makeOpponentsTurn() {
       }
 
       if (is_game_over) {
+        GameTime.end = Date.now()
+
         document.querySelectorAll("#game_grid button").forEach((button) => {
           button.disabled = true
         })
@@ -159,8 +170,24 @@ function createUserForm() {
     document.querySelector("meta[name=csrf-token]").getAttribute("content")
   )
 
+  const gridSizeField = document.createElement("input")
+  gridSizeField.setAttribute("name", "gridSize")
+  gridSizeField.setAttribute("type", "hidden")
+  gridSizeField.setAttribute(
+    "value",
+    document.getElementById("grid_size").getAttribute("value")
+  )
+
+  const playTimeField = document.createElement("input")
+  playTimeField.setAttribute("name", "playTime")
+  playTimeField.setAttribute("type", "hidden")
+  playTimeField.setAttribute("value", GameTime.end - GameTime.start)
+
   inputGroup.appendChild(inputField)
   form.appendChild(inputGroup)
   form.appendChild(csrfField)
+  form.appendChild(gridSizeField)
+  form.appendChild(playTimeField)
+
   return form
 }
