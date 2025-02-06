@@ -1,86 +1,120 @@
 function makeMove(buttonId) {
-  setButtonsValue(buttonId, 'X');
-  makeOpponentsTurn();
+  setButtonsValue(buttonId, "X")
+  makeOpponentsTurn()
 }
 
 function makeOpponentsTurn() {
-  const matrix = [];
+  const matrix = []
 
-  let row = 1;
-  let col = 1;
-  let rowTexts = [];
+  let row = 1
+  let col = 1
+  let rowTexts = []
   do {
-    const buttonId = `game_grid_${row}_${col}`;
+    const buttonId = `game_grid_${row}_${col}`
 
     // Very end of the matrix.
     if (document.getElementById(buttonId) == null && col === 1) {
-      break;
+      break
     }
 
     // End of the row.
     if (document.getElementById(buttonId) == null) {
-      matrix.push(rowTexts);
-      row++;
-      col = 1;
-      rowTexts = [];
-      continue;
+      matrix.push(rowTexts)
+      row++
+      col = 1
+      rowTexts = []
+      continue
     }
 
-    rowTexts.push(document.getElementById(buttonId).innerText);
-    col++;
-  } while (true);
+    rowTexts.push(document.getElementById(buttonId).innerText)
+    col++
+  } while (true)
 
-  fetch(
-    '/index/opponents-turn',
-    {
-      method: "POST",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ matrix: matrix }),
-    }
-  )
-  .then((response) => {
-    if (response.ok) {
-      return response.json();
-    }
-    return Promise.reject(response); // 2. reject instead of throw
+  fetch("/index/opponents-turn", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ matrix: matrix }),
   })
+    .then((response) => {
+      if (response.ok) {
+        return response.json()
+      }
+      return Promise.reject(response) // 2. reject instead of throw
+    })
     .then((json) => {
-      let is_game_over = json.is_game_over;
-      let is_player_win = json.is_player_win;
-      let is_computer_win = json.is_computer_win;
+      let is_game_over = json.is_game_over
+      let is_player_win = json.is_player_win
+      let is_computer_win = json.is_computer_win
 
       if (!is_game_over || !is_player_win) {
-        let row = json.row + 1;
-        let col = json.col + 1;
-        const buttonId = `game_grid_${row}_${col}`;
-        setButtonsValue(buttonId, 'O');
+        let row = json.row + 1
+        let col = json.col + 1
+        const buttonId = `game_grid_${row}_${col}`
+        setButtonsValue(buttonId, "O")
       }
 
       if (is_game_over) {
-        document
-          .querySelectorAll("#game_grid button")
-          .forEach(  button => {
-            button.disabled = true;
-         }
-        );
+        document.querySelectorAll("#game_grid button").forEach((button) => {
+          button.disabled = true
+        })
 
         if (is_player_win) {
-          alert('Congratulations, you won!');
-        }
-        else if (is_computer_win) {
-          alert('Computer won!');
-        }
-        else {
-          alert('Nobody won :(');
+          showGameOverModal("You won!")
+        } else if (is_computer_win) {
+          alert("Computer won!")
+        } else {
+          alert("Nobody won :(")
         }
       }
     })
 }
 
 function setButtonsValue(buttonId, text) {
-  document.getElementById(buttonId).innerText = text;
-  document.getElementById(buttonId).disabled = true;
+  document.getElementById(buttonId).innerText = text
+  document.getElementById(buttonId).disabled = true
+}
+
+/**
+ * 1. When game is over take a status
+ * 2. Load modal with different content depending on status
+ * 3. Type of statuses: won | lost | draw
+ * 4. If status 'lost | draw' show message
+ * 5. If status 'won' show a form
+ * 6. The form should have one visible input field, name
+ * 7. Name could be a username or a real name, they must be unique tho
+ * 8. The form should contain the rest of the meta data in invisible fields
+ * 9. The form also needs a csrf token that we will check in the backend
+ * 10. If the token is not corrupted or messed with we validate and filter the input from the form and save it to db
+ * 11. If token not equal $SESSION['token] we exit the application with a 405 or something
+ *
+ *
+ * @param {string} message
+ */
+
+function showGameOverModal(message) {
+  const modal = document.getElementById("gameOverModal")
+  const backdrop = document.getElementById("backdrop")
+
+  if (modal === null) {
+    alert(message)
+    // ToDo: I imagine we have a telemetry system for the front-end as well
+    // ToDo: Here would be a good place to let our front-end engineers know we could not find the modal.
+  }
+
+  backdrop.style.display = "block"
+  modal.style.display = "block"
+  modal.classList.add("show")
+
+  modal.querySelector("#closeModal").addEventListener("click", function () {
+    closeGameModal(backdrop, modal)
+  })
+}
+
+function closeGameModal(backdrop, modal) {
+  backdrop.style.display = "none"
+  modal.style.display = "none"
+  modal.classList.remove("show")
 }
