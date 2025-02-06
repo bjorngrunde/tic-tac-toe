@@ -100,23 +100,6 @@ function setButtonsValue(buttonId, text) {
   document.getElementById(buttonId).disabled = true
 }
 
-/**
- * 1. When game is over take a status
- * 2. Load modal with different content depending on status
- * 3. Type of statuses: won | lost | draw
- * 4. If status 'lost | draw' show message
- * 5. If status 'won' show a form
- * 6. The form should have one visible input field, name
- * 7. Name could be a username or a real name, they must be unique tho
- * 8. The form should contain the rest of the meta data in invisible fields
- * 9. The form also needs a csrf token that we will check in the backend
- * 10. If the token is not corrupted or messed with we validate and filter the input from the form and save it to db
- * 11. If token not equal $SESSION['token] we exit the application with a 405 or something
- *
- *
- * @param {string} message
- */
-
 function showGameOverModal(gameStatus) {
   const modal = document.getElementById("gameOverModal")
   const backdrop = document.getElementById("backdrop")
@@ -140,13 +123,14 @@ function showGameOverModal(gameStatus) {
       .querySelector("input[name=userName]")
       .addEventListener("input", (event) => {
         const validation = validateInput(event.target.value)
+        const submitBtn = document.getElementById("submitBtn")
 
         if (validation) {
-          document.getElementById("submitBtn").removeAttribute("disabled")
+          submitBtn.removeAttribute("disabled")
+          submitBtn.addEventListener("click", submitForm)
         } else {
-          document
-            .getElementById("submitBtn")
-            .setAttribute("disabled", "disbaled")
+          submitBtn.setAttribute("disabled", "disbaled")
+          submitBtn.removeEventListener("click", submitForm)
         }
       })
   }
@@ -217,7 +201,7 @@ function validateInput(name) {
     return false
   }
 
-  if (name.length <= 3 || name.length > 20) {
+  if (name.length < 3 || name.length > 20) {
     setErrorMessage("A name must be at least 3 characters and maximum of 20")
     return false
   }
@@ -234,4 +218,28 @@ function setErrorMessage(message) {
   const elem = document.getElementById("userErrorMessage")
 
   elem.innerHTML = message
+}
+
+async function submitForm(event) {
+  event.preventDefault()
+
+  const name = document.querySelector("input[name=userName]").value
+  const csrf = document.querySelector("input[name=csrfToken]").value
+  const grid_size = document.querySelector("input[name=gridSize]").value
+  const play_time = document.querySelector("input[name=playTime]").value
+
+  data = new FormData()
+  data.append("name", name)
+  data.append("csrf", csrf)
+  data.append("grid_size", grid_size)
+  data.append("play_time", play_time)
+
+  response = await fetch("/leaderboard/create", {
+    method: "POST",
+    body: data,
+  })
+
+  if (response.status === 200) {
+    window.location.href = "/leaderboard/index"
+  }
 }
