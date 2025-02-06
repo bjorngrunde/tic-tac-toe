@@ -1,3 +1,16 @@
+// Enum like status object
+const STATUS = Object.freeze({
+  WON: {
+    status: "won",
+    message: "Congratulations, You won!",
+    form: () => {
+      return createUserForm()
+    },
+  },
+  LOST: { status: "lost", message: "You lost :(" },
+  DRAW: { status: "draw", message: "Draw! Better luck next time." },
+})
+
 function makeMove(buttonId) {
   setButtonsValue(buttonId, "X")
   makeOpponentsTurn()
@@ -61,13 +74,13 @@ function makeOpponentsTurn() {
           button.disabled = true
         })
 
-        if (is_player_win) {
-          showGameOverModal("You won!")
-        } else if (is_computer_win) {
-          alert("Computer won!")
-        } else {
-          alert("Nobody won :(")
-        }
+        const statusObject = is_player_win
+          ? STATUS.WON
+          : is_computer_win
+          ? STATUS.LOST
+          : STATUS.DRAW
+
+        showGameOverModal(statusObject)
       }
     })
 }
@@ -94,12 +107,12 @@ function setButtonsValue(buttonId, text) {
  * @param {string} message
  */
 
-function showGameOverModal(message) {
+function showGameOverModal(gameStatus) {
   const modal = document.getElementById("gameOverModal")
   const backdrop = document.getElementById("backdrop")
 
   if (modal === null) {
-    alert(message)
+    alert(gameStatus.message)
     // ToDo: I imagine we have a telemetry system for the front-end as well
     // ToDo: Here would be a good place to let our front-end engineers know we could not find the modal.
   }
@@ -107,6 +120,12 @@ function showGameOverModal(message) {
   backdrop.style.display = "block"
   modal.style.display = "block"
   modal.classList.add("show")
+
+  modal.querySelector(".modal-title").innerHTML = gameStatus.message
+
+  if (gameStatus.status === "won") {
+    modal.querySelector(".modal-body").appendChild(gameStatus.form())
+  }
 
   modal.querySelector("#closeModal").addEventListener("click", function () {
     closeGameModal(backdrop, modal)
@@ -117,4 +136,31 @@ function closeGameModal(backdrop, modal) {
   backdrop.style.display = "none"
   modal.style.display = "none"
   modal.classList.remove("show")
+}
+
+function createUserForm() {
+  const form = document.createElement("form")
+  form.classList.add("form")
+
+  const inputGroup = document.createElement("div")
+  inputGroup.classList.add("form-group")
+
+  const inputField = document.createElement("input")
+  inputField.classList.add("form-control")
+  inputField.setAttribute("type", "text")
+  inputField.setAttribute("placeholder", "Add your username")
+  inputField.setAttribute("name", "userName")
+
+  const csrfField = document.createElement("input")
+  csrfField.setAttribute("name", "csrfToken")
+  csrfField.setAttribute("type", "hidden")
+  csrfField.setAttribute(
+    "value",
+    document.querySelector("meta[name=csrf-token]").getAttribute("content")
+  )
+
+  inputGroup.appendChild(inputField)
+  form.appendChild(inputGroup)
+  form.appendChild(csrfField)
+  return form
 }
