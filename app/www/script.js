@@ -19,7 +19,7 @@ function makeMove(buttonId) {
   setButtonsValue(buttonId, "X")
 
   if (GameTime.start === 0) {
-    GameTime.start = Date.now()
+    GameTime.start = performance.now()
   }
   makeOpponentsTurn()
 }
@@ -78,7 +78,7 @@ function makeOpponentsTurn() {
       }
 
       if (is_game_over) {
-        GameTime.end = Date.now()
+        GameTime.end = performance.now()
 
         document.querySelectorAll("#game_grid button").forEach((button) => {
           button.disabled = true
@@ -242,11 +242,10 @@ async function submitForm(event) {
   })
 
   if (response.status === 200) {
-    json = await response.json()
-    console.log(json)
+    json = await response.text()
     /**
      * Go to leaderboard with grid_size as param
      */
-    //window.location.href = "/leaderboard/"
+    window.location.href = `/leaderboard?grid_size=${json.grid_size}`
   }
 }

@@ -4,11 +4,17 @@
  * @var \App\Views\LeaderboardView $this
  * @see \App\Controllers\IndexController::chartAjaxAction()
  */
-
-$rank = 0;
 ?>
 
 <div class="row content-container col-xs-12">
+    <div class="container-fluid">
+        <div class="row">
+            <h3>Bracket size: <?= $this->grid_size; ?> columns</h3>
+        </div>
+        <div class="row">
+            <h3>Total players in this bracket: <?= $this->playerCount; ?></h3>
+        </div>
+    </div>
     <table class="table">
         <thead>
             <tr>
@@ -20,9 +26,9 @@ $rank = 0;
         <tbody>
             <?php foreach ($this->players as $player) { ?>
                 <tr>
-                    <td><?= ++$rank; ?></td>
+                    <td><?= ++$this->rank; ?></td>
                     <td><?= $player['name']; ?></td>
-                    <td><?= $player['play_time_seconds']; ?></td>
+                    <td><?= $this->showSeconds((int) $player['play_time_seconds']); ?> seconds</td>
                 </tr>
             <?php } ?>
         </tbody>

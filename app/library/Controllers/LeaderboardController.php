@@ -14,11 +14,22 @@ class LeaderboardController implements ControllerInterface
 {
     public function indexAction(): AbstractView
     {
+        $grid_size = (int) $_GET['grid_size'];
+
+        if ($grid_size === null || ($grid_size < 3 || $grid_size > 50)) {
+            $grid_size = 3;
+        }
+
         $view = new LeaderboardView();
 
-        // Todo: redo this crap!
-        $players = (new PlayersTable())->getLeaders(3);
-        $view->players = $players;
+        $players = new PlayersTable();
+
+        $playersData = $players->getLeaders($grid_size);
+        $countData = $players->getCount(['grid_size = :grid_size'], [':grid_size' => $grid_size], distinctField: 'name');
+
+        $view->players = $playersData;
+        $view->playerCount = $countData;
+        $view->grid_size = $grid_size;
 
         return $view;
     }
@@ -36,28 +47,24 @@ class LeaderboardController implements ControllerInterface
         }
 
         // This functionality should probably be part of a Model as an attribute array with allowed fields. But yeah yeah.
-        $castFields = (new PlayerCastFields())->cast($request);
+        $castFields = new PlayerCastFields();
+        $castFields->cast($request);
 
         $validated = new PlayerValidator();
-        $validated->validateRegister($castFields);
+        $validated->validateRegister($castFields->getFields());
 
         /** In a normal case we would have set formdata in a session and returned a form with errors matching the fields
-         * But right now we are working mostly with hidden data, and if that data has been modified we return and let fron-end reload page.
+         * But right now we are working mostly with hidden data, and if that data has been modified we return and let front-end reload page.
          */
         if ($validated->hasErrors()) {
             $this->returnMethodNotAllowed();
         }
 
         $playersTable = new PlayersTable();
-        $playersTable->addRow(
-            $castFields['name'],
-            (int) $castFields['grid_size'],
-            (int) $castFields['play_time'],
-            date('Y-m-d H:i:s')
-        );
+        $playersTable->addRow(userData: $castFields, date: date('Y-m-d H:i:s'));
 
         $json = new JsonView();
-        $json->data = ['grid_size' => $castFields['grid_size']]; // ToDo: Grid_size used as param for leaderboard when we get there
+        $json->data = ['grid_size' => $castFields->getField('grid_size')];
         return $json;
     }
 
