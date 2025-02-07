@@ -16,12 +16,13 @@ class PlayersTable extends AbstractTable
         return $this->executeSql(
             "
                 SELECT
-                    DISTINCT name,
+                    name,
                     play_time_seconds,
                     grid_size
                 FROM players
                 WHERE
                     grid_size = :grid_size
+                GROUP BY name
                 ORDER BY play_time_seconds ASC
                 LIMIT 20
             ",
