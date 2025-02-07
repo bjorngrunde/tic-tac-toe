@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Core\Rules;
+namespace App\Rules;
 
-use App\Core\Rules\RuleInterface;
+use App\Rules\RuleInterface;
 
-class RequiredRule extends RuleInterface
+class RequiredRule implements RuleInterface
 {
   public function validate(array $formData, string $field, array $params): bool
   {

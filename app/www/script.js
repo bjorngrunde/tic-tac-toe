@@ -242,6 +242,8 @@ async function submitForm(event) {
   })
 
   if (response.status === 200) {
+    json = await response.json()
+    console.log(json)
     /**
      * Go to leaderboard with grid_size as param
      */

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Core\Validators;
+namespace App\Validators;
 
-use App\Core\Validators\Validator;
-use App\Core\Rules\{UsernameRule, MaxRule, MinRule, RequiredRule};
+use App\Validators\Validator;
+use App\Rules\{UsernameRule, MaxRule, MinRule, RequiredRule};
 
 /**
  * In an application where we have more time we probably have a form object and a data model

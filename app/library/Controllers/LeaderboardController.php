@@ -3,8 +3,8 @@
 namespace App\Controllers;
 
 use App\Core\CSRF;
-use App\Core\Filters\PlayerCastFields;
-use App\Core\Validators\PlayerValidator;
+use App\Filters\PlayerCastFields;
+use App\Validators\PlayerValidator;
 use App\Models\PlayersTable;
 use App\Views\AbstractView;
 use App\Views\JsonView;
@@ -35,6 +35,7 @@ class LeaderboardController implements ControllerInterface
             $this->returnMethodNotAllowed();
         }
 
+        // This functionality should probably be part of a Model as an attribute array with allowed fields. But yeah yeah.
         $castFields = (new PlayerCastFields())->cast($request);
 
         $validated = new PlayerValidator();

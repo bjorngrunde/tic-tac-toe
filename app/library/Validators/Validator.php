@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Core\Validators;
+namespace App\Validators;
 
-use App\Core\Rules\RuleInterface;
+use App\Rules\RuleInterface;
 
 class Validator
 {

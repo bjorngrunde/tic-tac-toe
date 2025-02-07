@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Rules;
+namespace App\Rules;
 
 interface RuleInterface
 {

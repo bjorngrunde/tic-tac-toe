@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Filters;
+namespace App\Filters;
 
 /**
  * When we get form data, cast the data to only the fields we care about and prevent hackerman doing evil stuff.
