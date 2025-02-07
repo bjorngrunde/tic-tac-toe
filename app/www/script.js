@@ -242,11 +242,9 @@ async function submitForm(event) {
   })
 
   if (response.status === 200) {
-    json = await response.json()
-
     /**
      * Go to leaderboard with grid_size as param
      */
-    window.location.href = "/leaderboard/"
+    //window.location.href = "/leaderboard/"
   }
 }

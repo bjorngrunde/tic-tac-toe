@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Core\CSRF;
+use App\Core\Filters\PlayerCastFields;
+use App\Core\Validators\PlayerValidator;
 use App\Models\PlayersTable;
 use App\Views\AbstractView;
 use App\Views\JsonView;
@@ -30,27 +32,40 @@ class LeaderboardController implements ControllerInterface
         $token = htmlspecialchars($request['csrf']);
 
         if ((new CSRF())->handleCSRFToken($token)) {
-            header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
-            exit;
+            $this->returnMethodNotAllowed();
+        }
+
+        $castFields = (new PlayerCastFields())->cast($request);
+
+        $validated = new PlayerValidator();
+        $validated->validateRegister($castFields);
+
+        /** In a normal case we would have set formdata in a session and returned a form with errors matching the fields
+         * But right now we are working mostly with hidden data, and if that data has been modified we return and let fron-end reload page.
+         */
+        if ($validated->hasErrors()) {
+            $this->returnMethodNotAllowed();
         }
 
         $playersTable = new PlayersTable();
         $playersTable->addRow(
-            $request['name'],
-            (int) $request['grid_size'],
-            (int) $request['play_time'],
+            $castFields['name'],
+            (int) $castFields['grid_size'],
+            (int) $castFields['play_time'],
             date('Y-m-d H:i:s')
         );
 
-
-        /**
-         * 1. Check csrf token
-         * 2. Create a validation class and validate data
-         * 3. If validated, save data to db
-         * 4. 
-         */
         $json = new JsonView();
-        $json->data = ['status' => http_response_code(200)];
+        $json->data = ['grid_size' => $castFields['grid_size']]; // ToDo: Grid_size used as param for leaderboard when we get there
+        return $json;
+    }
+
+    /** Returning status like this allows us let front-end decide what to do, in our case reload page */
+    private function returnMethodNotAllowed(): AbstractView
+    {
+        $json = new JsonView();
+        $json->data = ['status' => 405, 'message' => 'method not allowed'];
+
         return $json;
     }
 }
