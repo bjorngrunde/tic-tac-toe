@@ -4,17 +4,34 @@ namespace App\Core;
 
 final class CSRF
 {
+  private string $token;
 
-  public static function setCSRFToken(): string
+  public function generateToken(): CSRF
   {
-    $token = bin2hex(random_bytes(35));
-    $_SESSION['csrf_token'] = $token;
-
-    return $token;
+    $this->token = bin2hex(random_bytes(35));
+    return $this;
   }
 
-  public static function handleCSRFToken(string $token): bool
+  public function putToken(): string
   {
-    return $_SESSION['csrf_token'] === $token;
+    return $_SESSION['csrf_token'];
+  }
+
+  public function setCSRFToken(): CSRF
+  {
+    if (!isset($_SESSION['csrf_token'])) {
+      $_SESSION['csrf_token'] = $this->generateToken()->putToken();
+    }
+    return $this;
+  }
+
+  public function forceFullySetNewToken(): void
+  {
+    $_SESSION['csrf_token'] = $this->token;
+  }
+
+  public function handleCSRFToken(string $token): bool
+  {
+    return $_SESSION['csrf_token'] !== $token;
   }
 }

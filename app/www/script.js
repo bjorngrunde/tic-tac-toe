@@ -122,6 +122,7 @@ function showGameOverModal(gameStatus) {
     document
       .querySelector("input[name=userName]")
       .addEventListener("input", (event) => {
+        event.preventDefault()
         const validation = validateInput(event.target.value)
         const submitBtn = document.getElementById("submitBtn")
 
@@ -221,25 +222,31 @@ function setErrorMessage(message) {
 }
 
 async function submitForm(event) {
-  event.preventDefault()
-
   const name = document.querySelector("input[name=userName]").value
   const csrf = document.querySelector("input[name=csrfToken]").value
   const grid_size = document.querySelector("input[name=gridSize]").value
   const play_time = document.querySelector("input[name=playTime]").value
 
-  data = new FormData()
-  data.append("name", name)
-  data.append("csrf", csrf)
-  data.append("grid_size", grid_size)
-  data.append("play_time", play_time)
-
   response = await fetch("/leaderboard/create", {
     method: "POST",
-    body: data,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: name,
+      csrf: csrf,
+      grid_size: grid_size,
+      play_time: play_time,
+    }),
   })
 
   if (response.status === 200) {
-    window.location.href = "/leaderboard/index"
+    json = await response.json()
+
+    /**
+     * Go to leaderboard with grid_size as param
+     */
+    window.location.href = "/leaderboard/"
   }
 }

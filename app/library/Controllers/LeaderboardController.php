@@ -15,22 +15,32 @@ class LeaderboardController implements ControllerInterface
         $view = new LeaderboardView();
 
         // Todo: redo this crap!
-        $players = (new PlayersTable())->getLeaders(10);
+        $players = (new PlayersTable())->getLeaders(3);
         $view->players = $players;
 
         return $view;
     }
 
-    public function createAction(): JsonView
+    public function createAction(): AbstractView
     {
         $requestJson = file_get_contents('php://input');
         $request = json_decode($requestJson, true);
 
         // With more time this type of checks should be done in middleware piplines
-        if (!CSRF::handleCSRFToken($request['csrf'])) {
+        $token = htmlspecialchars($request['csrf']);
+
+        if ((new CSRF())->handleCSRFToken($token)) {
             header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
             exit;
         }
+
+        $playersTable = new PlayersTable();
+        $playersTable->addRow(
+            $request['name'],
+            (int) $request['grid_size'],
+            (int) $request['play_time'],
+            date('Y-m-d H:i:s')
+        );
 
 
         /**

@@ -3,6 +3,7 @@
 namespace App\Views;
 
 use App\Views\Layouts\AppLayout;
+use App\Core\CSRF;
 
 abstract class AbstractView
 {
@@ -46,6 +47,12 @@ abstract class AbstractView
     {
         $layout = new AppLayout($this);
         $layout->render();
+    }
+
+    public function setCSRFToken(): string
+    {
+        $csrf = new CSRF();
+        return $csrf->generateToken()->setCSRFToken()->putToken();
     }
 
     abstract public function render(): void;

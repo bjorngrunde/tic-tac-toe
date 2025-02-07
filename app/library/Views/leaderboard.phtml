@@ -5,8 +5,26 @@
  * @see \App\Controllers\IndexController::chartAjaxAction()
  */
 
+$rank = 0;
 ?>
 
 <div class="row content-container col-xs-12">
-    <?php var_export($this->players) ?>
+    <table class="table">
+        <thead>
+            <tr>
+                <td>Rank</td>
+                <td>Name</td>
+                <td>Time</td>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->players as $player) { ?>
+                <tr>
+                    <td><?= ++$rank; ?></td>
+                    <td><?= $player['name']; ?></td>
+                    <td><?= $player['play_time_seconds']; ?></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
 </div>
