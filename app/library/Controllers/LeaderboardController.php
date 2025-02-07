@@ -14,9 +14,9 @@ class LeaderboardController implements ControllerInterface
 {
     public function indexAction(): AbstractView
     {
-        $grid_size = (int) $_GET['grid_size'];
+        $grid_size = intval($_GET['grid_size'] ?? 3);
 
-        if ($grid_size === null || ($grid_size < 3 || $grid_size > 50)) {
+        if ($grid_size < 3 || $grid_size > 10) {
             $grid_size = 3;
         }
 

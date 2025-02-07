@@ -97,6 +97,11 @@ function makeOpponentsTurn() {
 
 function setButtonsValue(buttonId, text) {
   document.getElementById(buttonId).innerText = text
+  if (text === "X") {
+    document.getElementById(buttonId).classList.add("player")
+  } else {
+    document.getElementById(buttonId).classList.add("computer")
+  }
   document.getElementById(buttonId).disabled = true
 }
 
@@ -243,6 +248,7 @@ async function submitForm(event) {
 
   if (response.status === 200) {
     json = await response.json()
+
     /**
      * Go to leaderboard with grid_size as param
      */

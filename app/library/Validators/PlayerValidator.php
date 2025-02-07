@@ -27,7 +27,7 @@ class PlayerValidator
   {
     $this->validator->validate($formData, [
       'name' => ['required', 'min:3', 'max:20', 'username'],
-      'grid_size' => ['required', 'min:3', 'max:50'],
+      'grid_size' => ['required', 'min:3', 'max:10'],
       'play_time' => ['required']
     ]);
   }

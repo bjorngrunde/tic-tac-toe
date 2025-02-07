@@ -12,7 +12,7 @@
         <input
             type="number"
             min="3"
-            max="20"
+            max="10"
             id="grid_size"
             name="grid_size"
             value="<?= $this->gridSize ?>" />
@@ -20,7 +20,7 @@
     </form>
 </div>
 
-<div class="row content-container col-xs-12">
+<div class="row content-container col-xs-12 center-block">
     <div id="game_grid_container">
         <table id="game_grid">
             <?php for ($row = 1; $row <= $this->gridSize; $row++) { ?>
@@ -28,8 +28,9 @@
                     <?php
                     for ($col = 1; $col <= $this->gridSize; $col++) {
                         $button_id = 'game_grid_' . $row . '_' . $col;
+                        $tableClass = '';
                     ?>
-                        <td>
+                        <td class="<?= $this->setTableClass($row, $col, $this->gridSize); ?>">
                             <button id="<?= $button_id ?>" onclick="makeMove('<?= $button_id ?>')"></button>
                         </td>
                     <?php } ?>

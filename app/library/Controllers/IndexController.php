@@ -23,7 +23,7 @@ class IndexController implements ControllerInterface
     {
         // Simple validation
         $gridSize = intval($_GET['grid_size'] ?? 3);
-        if ($gridSize < 3 || $gridSize > 50) {
+        if ($gridSize < 3 || $gridSize > 10) {
             $gridSize = 3;
         }
         return $gridSize;

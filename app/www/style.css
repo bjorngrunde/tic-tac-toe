@@ -9,20 +9,55 @@ body {
 .toolbar {
     padding: 15px;
     border-radius: 5px;
-    background-color: #e7e7e7;
-    width: 100%;
+    background-color: white;
+    box-shadow: 2px 2px 2px #ddd; 
+    margin: 5px auto;
 }
 .toolbar input {
     width: 100px;
 }
 
+#game_grid {
+    margin: 5px auto;
+    border: none;
+}
+
+#game_grid td {
+    width: 88px;
+    height: 88px; 
+}
+
+#game_grid .vert {
+    border-left: 4px solid #ddd;
+    border-right: 4px solid #ddd;
+}
+
+#game_grid .hori {
+    border-top: 4px solid #ddd;
+    border-bottom: 4px solid #ddd;
+}
+
+.player {
+    color: #8c90ef;
+}
+
+.computer {
+    color: #ef908c;
+}
+
 #game_grid button{
-    width: 20px;
-    height: 20px;
-    padding: 2px;
+    width: 100px;
+    height: 100px;
     margin: 0;
+    padding: 0;
     text-align: center;
     line-height: 0;
+    border: 0;
+    box-shadow: none;
+    background-color: white;
+    border-radius: 0px;
+    font-size: 52px;
+    font-weight: 700;
 }
 
 .red-text {
