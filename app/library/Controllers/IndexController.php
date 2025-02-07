@@ -65,6 +65,4 @@ class IndexController implements ControllerInterface
         ];
         return $view;
     }
-
-
 }
