@@ -6,9 +6,9 @@
  */
 
 ?>
+<h5 class="subtitle">Select a game size and let's gooo!</h5>
 <div class="toolbar">
     <form>
-        <label for="grid_size">Grid size</label>
         <input
             type="number"
             min="3"
@@ -16,7 +16,7 @@
             id="grid_size"
             name="grid_size"
             value="<?= $this->gridSize ?>" />
-        <input type="submit" value="Play">
+        <input class="playBtn" type="submit" value="Play">
     </form>
 </div>
 

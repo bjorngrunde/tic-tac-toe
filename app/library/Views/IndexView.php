@@ -8,7 +8,7 @@ class IndexView extends AbstractView
 
     public function __construct()
     {
-        $this->setTitle("Hello player!");
+        $this->setTitle("Lets play Tic-Tac-Toe!");
     }
 
     public function render(): void

@@ -159,6 +159,14 @@ function createUserForm() {
   const inputGroup = document.createElement("div")
   inputGroup.classList.add("form-group")
 
+  const labelField = document.createElement("label")
+  labelField.setAttribute("for", "userName")
+  labelField.classList.add("userFieldLabel")
+
+  const textContent = document.createTextNode(
+    "Enter you game tag and see if you made it to the leaderboard"
+  )
+
   const inputField = document.createElement("input")
   inputField.classList.add("form-control")
   inputField.setAttribute("type", "text")
@@ -190,6 +198,8 @@ function createUserForm() {
   playTimeField.setAttribute("type", "hidden")
   playTimeField.setAttribute("value", GameTime.end - GameTime.start)
 
+  labelField.appendChild(textContent)
+  inputGroup.appendChild(labelField)
   inputGroup.appendChild(inputField)
   inputGroup.appendChild(errorMessage)
 

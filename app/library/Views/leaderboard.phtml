@@ -9,10 +9,18 @@
 <div class="row content-container col-xs-12">
     <div class="container-fluid">
         <div class="row">
-            <h3>Bracket size: <?= $this->grid_size; ?> columns</h3>
-        </div>
-        <div class="row">
-            <h3>Total players in this bracket: <?= $this->playerCount; ?></h3>
+            <div class="col-md-6">
+                <div class="panel panel-default bracket">
+                    <div class="panel-heading">Column Size</div>
+                    <div class="panel-body"><?= $this->grid_size; ?></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default players-count">
+                    <div class="panel-heading">Total players</div>
+                    <div class="panel-body"><?= $this->playerCount; ?></div>
+                </div>
+            </div>
         </div>
     </div>
     <table class="table">
@@ -26,9 +34,9 @@
         <tbody>
             <?php foreach ($this->players as $player) { ?>
                 <tr>
-                    <td><?= ++$this->rank; ?></td>
-                    <td><?= $player['name']; ?></td>
-                    <td><?= $this->showSeconds((int) $player['play_time_seconds']); ?> seconds</td>
+                    <td class="rank"><?= ++$this->rank; ?></td>
+                    <td class="name"><?= $player['name']; ?></td>
+                    <td class="time"><?= $this->showSeconds((int) $player['play_time_seconds']); ?> seconds</td>
                 </tr>
             <?php } ?>
         </tbody>
