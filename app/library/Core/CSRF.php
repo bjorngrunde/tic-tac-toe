@@ -20,7 +20,8 @@ final class CSRF
   public function setCSRFToken(): CSRF
   {
     if (!isset($_SESSION['csrf_token'])) {
-      $_SESSION['csrf_token'] = $this->generateToken()->putToken();
+      $this->generateToken();
+      $_SESSION['csrf_token'] = $this->token;
     }
     return $this;
   }
