@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Filters\CastableInterface;
+
 class PlayersTable extends AbstractTable
 {
     protected function getTableName(): string
@@ -20,6 +22,9 @@ class PlayersTable extends AbstractTable
                 FROM players
                 WHERE
                     grid_size = :grid_size
+                GROUP BY name
+                ORDER BY play_time_seconds ASC
+                LIMIT 20
             ",
             [
                 ':grid_size' => $gridSize,
@@ -27,7 +32,7 @@ class PlayersTable extends AbstractTable
         );
     }
 
-    public function addRow(string $name, int $gridSize, int $playTimeSeconds, string $date): void
+    public function addRow(CastableInterface $userData, string $date): void
     {
         $this->executeSql(
             "
@@ -37,9 +42,9 @@ class PlayersTable extends AbstractTable
                     (:name, :grid_size, :play_time_seconds, :date)
             ",
             [
-                ':name' => $name,
-                ':grid_size' => $gridSize,
-                ':play_time_seconds' => $playTimeSeconds,
+                ':name' => $userData->getField('name'),
+                ':grid_size' => $userData->getField('grid_size'),
+                ':play_time_seconds' => $userData->getField('play_time'),
                 ':date' => $date,
             ]
         );

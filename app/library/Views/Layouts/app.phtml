@@ -1,6 +1,7 @@
 <?php
 
 use App\Views\Layouts\AppLayout;
+use App\Core\CSRF;
 
 /** @var AppLayout $this */
 
@@ -8,10 +9,12 @@ use App\Views\Layouts\AppLayout;
 
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="<?= $this->view->setCSRFToken(); ?>" />
 
     <title>Tic-tac-toe</title>
 
@@ -37,10 +40,11 @@ use App\Views\Layouts\AppLayout;
         <?php if ($this->view->getTitle()) { ?>
             <h1><?= htmlspecialchars($this->view->getTitle()) ?></h1>
         <?php } else { ?>
-            <br/>
+            <br />
         <?php } ?>
         <?php $this->view->render(); ?>
     </div>
 
 </body>
+
 </html>

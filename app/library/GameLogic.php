@@ -29,20 +29,37 @@ class GameLogic
     }
 
     /**
-     * Good enough for MVP.
-     * No one will notice.
+     * Simply iterate over each row and foreach row iterate over columns.
+     * If column is empty, save the row index in available_rows
+     * Save the column index in available_cols[$row_index]
+     * 
+     * Then use array_rand to get a random availble key and use the key to get a value from both arrays.
      */
     public function findBestMove(): array
     {
-        $gridSize = count($this->matrix) - 1;
-        $row = rand(0, $gridSize);
-        $col = rand(0, $gridSize);
+        $available_rows = [];
+        $available_cols = [];
 
-        if ($this->matrix[$row][$col] === '') {
-            return [$row, $col];
+        foreach ($this->matrix as $row_key => $row) {
+            foreach ($row as $col_key => $column) {
+                if ($column === '') {
+
+                    $available_cols[$row_key][] = $col_key;
+
+                    if (!in_array($row_key, $available_rows)) {
+                        $available_rows[] = $row_key;
+                    }
+                }
+            }
         }
 
-        return $this->findBestMove();
+        $row_key = array_rand($available_rows);
+        $row = $available_rows[$row_key];
+
+        $col_key = array_rand($available_cols[$row]);
+        $col = $available_cols[$row][$col_key];
+
+        return [$row, $col];
     }
 
     public function setComputersMove(int $row, int $col): void

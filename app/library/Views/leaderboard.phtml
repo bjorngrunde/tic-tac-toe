@@ -4,9 +4,41 @@
  * @var \App\Views\LeaderboardView $this
  * @see \App\Controllers\IndexController::chartAjaxAction()
  */
-
 ?>
 
 <div class="row content-container col-xs-12">
-    <?php var_export($this->players) ?>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default bracket">
+                    <div class="panel-heading">Column Size</div>
+                    <div class="panel-body"><?= $this->grid_size; ?></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default players-count">
+                    <div class="panel-heading">Total players</div>
+                    <div class="panel-body"><?= $this->playerCount; ?></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <td>Rank</td>
+                <td>Name</td>
+                <td>Time</td>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->players as $player) { ?>
+                <tr>
+                    <td class="rank"><?= ++$this->rank; ?></td>
+                    <td class="name"><?= $player['name']; ?></td>
+                    <td class="time"><?= $this->showSeconds((int) $player['play_time_seconds']); ?> seconds</td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
 </div>

@@ -1,7 +1,19 @@
 body {
     padding-top: 50px;
 }
+.container h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #7A7283;
+    text-align: center;
+}
 
+.subtitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: #7A7283;
+    text-align: center;
+}
 .content-container {
     margin-top: 20px;
 }
@@ -9,18 +21,157 @@ body {
 .toolbar {
     padding: 15px;
     border-radius: 5px;
-    background-color: #e7e7e7;
-    width: 100%;
+    background-color: white;
+    margin: 5px auto;
+}
+
+.toolbar form {
+    width: 250px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.toolbar .playBtn {
+    background: #006A4E;
+    border: none;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
 }
 .toolbar input {
     width: 100px;
+    height: 40px;
+    border: 2px solid #ddd;
+}
+
+#game_grid {
+    margin: 5px auto;
+    border: none;
+}
+
+#game_grid td {
+    width: 88px;
+    height: 88px; 
+}
+
+#game_grid .vert {
+    border-left: 4px solid #ddd;
+    border-right: 4px solid #ddd;
+}
+
+#game_grid .hori {
+    border-top: 4px solid #ddd;
+    border-bottom: 4px solid #ddd;
+}
+
+.player {
+    color: #8c90ef;
+}
+
+.computer {
+    color: #ef908c;
 }
 
 #game_grid button{
-    width: 20px;
-    height: 20px;
-    padding: 2px;
+    width: 100px;
+    height: 100px;
     margin: 0;
+    padding: 0;
     text-align: center;
     line-height: 0;
+    border: 0;
+    box-shadow: none;
+    background-color: white;
+    border-radius: 0px;
+    font-size: 52px;
+    font-weight: 700;
+}
+
+.red-text {
+    color: red;
+}
+
+.modal-backdrop {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.modal-header h4 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #7A7283;
+}
+
+.modal-body .userFieldLabel {
+    font-weight: 700;
+    color: #7A7283;
+}
+
+.modal-body input {
+    border: 2px solid #ddd;
+    height: 40px;
+}
+
+#submitBtn {
+    background: #006A4E;
+    border: none;
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 15px;
+    color: white;
+}
+
+#submitBtn[disabled] {
+    background: #ACE1AF;
+}
+
+#closeModal {
+    background: #7A7283;
+    border: none;
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 15px;
+    color: white;
+}
+
+.bracket {
+    background: #6A3BC0;
+    border: none;
+    box-shadow: 1px 1px 10px #7A7283;
+}
+
+.players-count {
+    background: #1BD75E;
+    border: none;
+    box-shadow: 1px 1px 10px #7A7283;
+}
+
+.panel .panel-heading {
+    background: none;
+    border: none;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    text-align: center;
+}
+
+.panel .panel-body {
+    font-size: 32px;
+    font-weight: 700;
+    color: white;
+    text-align: center;
+}
+
+.table {
+    text-align: center;
+}
+
+.table thead {
+    font-size: 24px;
+    font-weight: 700;
+    color: #7A7283;
+}
+
+.table td {
+    font-size: 18px;
+    color: #7A7283;
 }
